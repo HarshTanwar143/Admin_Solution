@@ -1,0 +1,55 @@
+servicenow instance : it is nothing but a platform where you all will work. whther 
+its a developing company, developers, qa they works on instance.
+
+TYPES OF INSTANCE: 
+1. Production instance : which an organization is currently using live.
+2. non production instance : it has development instance and testing instance. In development instance all the development are takes place, all the requirements and updates
+send by the client will be implemented here story wise. as the particular story is completed that particular chunk is share with the QA instance. QA instance is the one where
+testers do their tasks. they check is the implementation done by the developers aligned with the client requirements or not. and if it is right then all those changes tranferred to
+the production instance.
+and if any issue is found by QA they generate the defect logging then again the work goes to developer instance.
+(NOte: SPM which is service portfolio mgmt, this is used for the defect logging, it helps to track the sprint going on and defect logging etc)
+all deployment part is also handled by developer only.
+3. PDI (personal development instance) : it is an instance provided by servicenow for learning and experiment only. that we'll create.
+
+
+https://developer.servicenow.com/
+
+NOTE: Servicenow provides its update in the form of names of famous cities.
+
+Whole administeration is divided into 3 things:
+1. users : are the individual accounts that are allowed to login into servicenow instance.(user can be anyone like a developer is also a user, a simple user is also a user etc)
+anyone who is using this instance and have credentials for login is a user.
+2. roles
+3. groups 
+
+
+
+
+NOTE: instance can be there life long but if you are not using instance more than 10 days then its data cleared and instance will release automatically. So, you just have to login 
+in to that instance so servicenow get to know that you are still using this instance.
+
+in real time, instances won't swipe out in 10 days, only pdi will be released after 10 days inactivity.
+so in real time companies asked for the instances from the servicenow, like i need 3 instances
+one for developer, one for QA and one for production then servicenow give the instance to the company
+and then company start work on them like create their incidents etc. servicenow provide the instance through 
+paid license. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
