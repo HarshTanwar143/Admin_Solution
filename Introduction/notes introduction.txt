@@ -1,0 +1,78 @@
+Everything which is possible through point and click that comes under admin
+scripting part comes under developer(most of the things are done through point and click but for customizable things we need scripting)
+then some advance things like automation, integration etc.
+ITSM
+
+we can access it from anywhere no requirement of any assets or anything.
+
+SERVICENOW:
+it is a cloud based platform that helps organizations to manage digital workflow and
+automate business processes.it provides you an ecosystem which is integrated with each 
+other and makes the things tooo easy, optimize and efficient to you
+
+initially he had the aim to create a ticketing mgmt platform which is ITSM right now.
+In ITSM itself servicenow gains lot of appreciation
+
+ITSM, CSM, HRSD, ITOM
+
+NowAssist servicenow platform
+
+ITSM includes incident mgmt, change mgmt, problem mgmt, knowledge mgmt
+ITOM : Keep track of all the assets of the company.(device config., network etc), even i have that much control if you storage is going to full then i can trigger an event too through it.
+HRSD : It helps HRs to automate the onboarding task, sends the mail quicker, creating records for their asset mgmt etc.
+CSM : If customer face any issue with the company's product then he can raise the case and even he can chat with the agent in real time which enhance the transparency., he can also check the state of his case too. so to handle the customer service part CSM is there.
+SecOps
+SPM : It provides a platform to manage all the running projects in your company.
+
+for basic entry level job only scripting, admin, basic ITSM is all you need to know, but if you have experience of 10 to 12 yrs then a company looking for an expert in one of these products.
+
+
+
+
+Salesforce is a CRM. it helps us to manage the customer side things, and product of salesforce are : salescloud(in this they manages all the sales related activities), service cloud, marketing cloud
+Servicenow provides CSM
+
+CSM and Servicecloud these two products collides, but apart from that salesforce doesn't provide ITOM, HRSD etc.
+
+Actually, Salesforce is more centered over customer side only but ITSM is more inclined towards the internal things of an organization only.
+But in servicenow also it is not totally handle all the internal workflow only, because one of its product can also handle the outer things too and that product is CSM.
+
+ServiceNow administerator : is the one who handles most of the configuration of an instance. By configuration, i mean who are eligible users, who are allowed to login, he handles their passwords and all. setting up the user records, setting up the tables, how tables looks, how form will look, set up ui policy. or simply we can say everything	possible through point and click. 
+(Note: approx 80 to 85 percent in servicenow is feasible through point and click only), in this role no scripting is needed.
+
+ServiceNow Developer : to handle all of the possible customizations in an instance developer comes in the role. like my table names should be something else etc. and the things which are not possible through point and click, where scripting is included servicenow developer roles comes into play.
+
+NOte: now administrator and develper roles are merged only.
+
+servicenow business analyst: to understand clients requirement you should also know basics and comm. must be good.
+
+servicenow QA Tester: is nothing but a person responsible to cosscheck and verify the requirements were placed by the end client and the implementation done by the developers. simply, they check are the developers developing the same things which were asked by the client or not.
+they check the edgecases... ATF(automated testing framework) is a tool for regression testing etc in this tool also they have to write a script only to automate the whole testing.
+
+servicenow architect : is the one who is going to frame the whole architecture of the implementation like these will be the tables which would be created. like this way we are going to implement this requirement. he will make the overview of the whole project.
+
+
+there is a slight diference b/w servicenow business analyst and servicenow counsultant : BA comes in to the role when the project is already closed. to communicate the daily things like how's the progress of the project is going on. and if client has some changes. and if developers want to ask some questions regarding the requirements then there is a role of BA. He is the bridge b/w developing team and the end client.
+But consultant comes in the role before these things only. we can say a new lead will be communicating with the consultant. He will be the one who is responsible for explaining the servicenow services and all the products which can help that particular cilent to solve the problem or optimize the problem which he is facing now.
+
+
+First consultant then architect comes in to the role. then after this it is the responsibility of the BA, developers and QA to build or optimize the product.
+
+
+right now salesforce is too populated and very dense market, if you joined this before 5 to 6 yrs then it would be good but now its kind of satuaration point.
+
+20+ IT growth in india
+
+servicenow and salesforce have their app store (like play store) where customer pay for the service and in servicenow there are the plugins
+now salesforce use lightening which is nothing but html css js only and including their programming language in it which is similar to java and they named it as apex.
+but servicenow is not introduced any of its new things
+
+so salesforce scripting is done in apex and servicenow scriptin is done in js.
+
+
+
+
+
+
+
+
