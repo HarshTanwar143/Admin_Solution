@@ -69,8 +69,91 @@ but servicenow is not introduced any of its new things
 
 so salesforce scripting is done in apex and servicenow scriptin is done in js.
 
+************************************************************************
+servicenow transform the unstructured work pattern in to a structure pattern.
+
+Multi-Instance Architecture: Unlike many cloud competitors (like Salesforce)
+that use Multi-Tenant architecture (shared database), ServiceNow utilizes a
+Multi-Instance architecture.
+● How it works: Each customer (tenant) receives their own unique software stack
+(Application Nodes) and their own isolated database.
+
+The "Now Platform"
+ServiceNow is often described as "a platform of platforms." It uses a Single Data
+Model. ● This means that Incident Management, HR Service Delivery, and Security
+Operations all share the same database structure, user table, and configuration
+management database (CMDB).
+● Result: Seamless reporting and logic transfer between different business units.
 
 
+Here are very short and interview-friendly explanations:
+
+### 1. Single System of Record
+
+**Meaning:** One place where all company data and requests are stored.
+**Example:** Instead of using emails and Excel, everyone uses ServiceNow.
+
+---
+
+### 2. Standardization
+
+**Meaning:** Every request follows the same fixed process.
+**Example:** Every laptop request needs manager approval before IT gets it.
+
+---
+
+### 3. Automation
+
+**Meaning:** Work is done automatically without manual effort.
+**Example:** If a server crashes, ServiceNow automatically creates a ticket and assigns it to the server team.
+
+---
+
+### 4. Transparency & Reporting
+
+**Meaning:** Everyone can track the status and performance of work.
+**Example:** Manager can see who is handling a ticket and how long it is taking.
+
+---
+
+### 5. Self-Service
+
+**Meaning:** Users can solve simple problems themselves.
+**Example:** An employee resets their own password using the Service Portal instead of calling IT.
+
+### **One-line revision**
+
+* **Single System of Record** → One place for all data.
+* **Standardization** → Same process for every request.
+* **Automation** → System does the work automatically.
+* **Transparency & Reporting** → Easy to track work and performance.
+* **Self-Service** → Users solve simple issues on their own.
+
+
+
+
+
+
+
+ This was
+the birth of the "Low-Code/No-Code" philosophy ServiceNow still uses today.
+
+CRM vs CSM (Very Short)
+CRM	CSM
+Focuses on getting and managing customers.	Focuses on helping customers after they become customers.
+Goal: Increase sales.	Goal: Resolve customer issues and improve satisfaction.
+
+
+
+
+ITSM (IT Service Management) is the process of managing and delivering IT 
+services efficiently to employees and the organization.
+
+
+
+
+
+Gpt link : https://chatgpt.com/share/6a496459-a3c0-83ee-891a-ed8e73acfae5
 
 
 

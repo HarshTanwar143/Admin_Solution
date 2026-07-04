@@ -67,17 +67,27 @@ parent field is for having the parent group name of this group like payroll grou
 
 
 important:
-Impersonate user or impersonation : Suppose, I have developed some things with the records assigned to me by the admin. Now, Admin wants to ensure like whichever things i have implemented, is it working fine or not. so he wouldn't need to communicate with me. Instead of asking to the user, the admin
-have a particular facility known as impersonation. So, Without the help of actual credentials of the user, admin can impersonate that particular user. and now admin can see everything which i am able to see in my instance. Simply, is everything working fine as i expected or not, i don't need user's credentials simple go and impersonate the user and you get his interface and then check.
+Impersonate user or impersonation : Suppose, I have developed some things with the records assigned to me by the admin. Now, 
+Admin wants to ensure like whichever things i have implemented, is it working fine or not. so he wouldn't need to communicate
+ with me. Instead of asking to the user, the admin
+have a particular facility known as impersonation. So, Without the help of actual credentials of the user, admin can 
+impersonate that particular user. and now admin can see everything which i am able to see in my instance. Simply, 
+is everything working fine as i expected or not, i don't need user's credentials simple go and impersonate the user 
+and you get his interface and then check.
 
 
-Visibility: like if admin wants that prateek can see S2Labs module, which is currently present in admin instance, then he can give the visiblity to this module to developer. It means all those who has the developer as role they can see this s2labs module so now prateek can see this. but how admin do know that he is able to see that or not? so for that also 
-the admin can impersonate prateek and go in to his instance without his credentials. and check is s2 labs module is showing to him or not.
+Visibility: like if admin wants that prateek can see S2Labs module, which is currently present in admin instance, then 
+he can give the visiblity to this module to developer. It means all those who has the developer as role they can see this 
+s2labs module so now prateek can see this. but how admin do know that he is able to see that or not? so for that also 
+the admin can impersonate prateek and go in to his instance without his credentials. and check is s2 labs module is 
+showing to him or not.
 this is the real time example of impersonation.
 
 after impersonation i am working as prateek, but i'm admin only. 
 
-i am impersonating a different user so that i can see how things are working for that particular user. to test all the configurations the developer or the admin just made and to see how the things are working for that particular user. that's all impersonation is.
+i am impersonating a different user so that i can see how things are working for that particular user. to test all the 
+configurations the developer or the admin just made and to see how the things are working for that particular user. that's
+ all impersonation is.
 
 
 
