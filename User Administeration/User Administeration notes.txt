@@ -1,0 +1,89 @@
+Impersonate User: An IT support engineer logs in as an employee to check why 
+they can't submit a leave request and fixes the issue.
+
+**Scenario:**
+
+* 👨‍💼 **Manager:** Gives **Admin Ravi** the **`security_admin`** role.
+* 👨‍💻 **Ravi (Admin):** Normally works as an admin.
+* 🔒 When Ravi needs to change security settings, he **elevates** to `security_admin`.
+* ✅ After finishing, the elevated access is turned off.
+
+**In short:** Permission is given once by a higher admin, and the user **activates (elevates)** it only when needed.
+
+user administeration: is nothing but managing the records and access of all the people which are allowed to sign in the servicenow instance.
+with help of user administeration only we define who are allowed to login in to the servicenow instance, what are their roles, and in what group they are in right now.
+
+
+so after creating the user record, admin can create a temporary password for him. through this password user can redirect to setup his own password
+here admin is creating the new users.
+
+reset password : means after entering temp. password you have to create the new password.
+
+locked out : suppose you entered wrong passwords for 5 6 times so it automatically show msg that you've been locked out and contact to admin or reset password
+then admin unchecked the locked out checkbox then user can reset the password.
+
+
+
+By using roles we can setup the level of access  a particular user have. 
+
+ACL:
+suppose there is a room which has all the documents of the HR team, now outside the room there is 
+a security guard and you instructed him that if any user of this particular designation, which is HR,
+has come then you allow them only to access that room. now the security guard in servicenow instance 
+is known as ACL.
+so, ACLs are the system configuration which manages the access of users to a particular data 
+or a functionality.
+
+imp. note: all the data will be here only in this instance like the accounts data, HR data, payroll data, but depending
+on the individual's role that particular data will be displayed to that user. if an HR team is login, they will not able to see the 
+payroll data.
+and which data is visible to whom is totally depends on the : UserId, role and how much access he have in this instance. and this access is given by admin by the help of ACLs.
+
+while creating the user we fill the department so that is not the role that is only for the sake of information of that user. The system things are configured from roles.
+
+(company me developer ki designation ka ek banda hai, but vo tumhe pta h ki developer hai but you also need to relate or integrate with the role of developer)
+(question : maine role diya developer, abb ye kon decide krega ki isko kitne data ka access hai? ye kya kya functions or operations perform kar skta hai? ye sab koi assign karta h alag se yaa fir ye fix access ya priveleges rhti h for developers? and agar ye inbuilt privelges aati hai roles ke sath to kya QA ke liye alag rhti h? HR ke liye alag rhti hai?)
+Answer : Role only defines what type of permissions a user can have.
+ACLs (Access Control Lists) decide which data the user can see, create, update, or delete.
+An admin configures these permissions based on company requirements.
+
+this snc_required_script_writer_permission is the role that is given by servicenow only to allow the user to write scripts.
+
+(question : ye jab hmne new user create kiya and jab jo hmne title me developer diya ya kuch bhi diya, agar jab hmm new role bnayenge tab kya yhi as it is name ka role bnana hoga ? yaa ye title and role ko koi relation hai hi nhi?)
+ohh ok, so uss user ke data me jaake roles pe click krke tab hme ye developer role usko assign karna hai.
+
+
+groups: suppose there are 15 to 20 members in one HR team, then we have to create each user separately, there is no doubt in it, but instead of going in every person profile and assigning the HR role, i simply create a group like HR group and i would associate that role with this group only. So, everyone who is added in this group will get the HR role.
+
+in group we have a field for manager so this manager will handle the mails, and approve the things in developers tasks.
+group gmail is for having access of this gmail to everyone.
+
+parent field is for having the parent group name of this group like payroll group has accounts group as parent etc. because there are the mltiple segregation of head.
+
+(overall crux is, admin have created the users and fill all his details, then he assigned roles, he can create groups too. and ACL is act like the security guard allow only the privileged users to access the instance or data)
+
+
+
+
+
+important:
+Impersonate user or impersonation : Suppose, I have developed some things with the records assigned to me by the admin. Now, Admin wants to ensure like whichever things i have implemented, is it working fine or not. so he wouldn't need to communicate with me. Instead of asking to the user, the admin
+have a particular facility known as impersonation. So, Without the help of actual credentials of the user, admin can impersonate that particular user. and now admin can see everything which i am able to see in my instance. Simply, is everything working fine as i expected or not, i don't need user's credentials simple go and impersonate the user and you get his interface and then check.
+
+
+Visibility: like if admin wants that prateek can see S2Labs module, which is currently present in admin instance, then he can give the visiblity to this module to developer. It means all those who has the developer as role they can see this s2labs module so now prateek can see this. but how admin do know that he is able to see that or not? so for that also 
+the admin can impersonate prateek and go in to his instance without his credentials. and check is s2 labs module is showing to him or not.
+this is the real time example of impersonation.
+
+after impersonation i am working as prateek, but i'm admin only. 
+
+i am impersonating a different user so that i can see how things are working for that particular user. to test all the configurations the developer or the admin just made and to see how the things are working for that particular user. that's all impersonation is.
+
+
+
+
+
+
+
+
+
