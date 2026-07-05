@@ -1,0 +1,176 @@
+what security_admin do?
+it provides access to all acls(any table acls)
+
+right click => configure => table -> then here you can see access control which
+are the ACLs
+now if you go inside one of the Access control then it is read only, but 
+when admin elevate his role as security_admin he can do write or update also.
+
+# after adding a user if you want to stay in the form page only for inserting 
+more users then simply click on save. then again after filling user details
+click insert and stay option.
+
+important: if company give you 400 employee details then you don't suppose to 
+fill the each user record manually for that servicenow provides a functionality 
+called data import. same for groups and roles also. if we have 2 to 3 roles and
+groups then we do it manually but if they are more then we do data import.
+
+User ---> Group <---- Roles
+
+technova project is for resource mgmt
+and other project is banking app
+
+
+columns of a table in servicenow are known as Fields
+when you are filling the userId, firstname, lastname while inserting new user
+these are nothing but the columns/fields of this user record.
+
+in fields also there are multiple datatypes, it could be string also, int, email, date
+,datetime etc.
+
+for creating a table go to : All -> system definition -> tables
+
+IMPORTANT:
+whenever we create a custom table then service add a suffix 'u'
+eg: i wrote "Bank" in Label fiel while creating a table then it automatically
+give "u_bank" as in its Name field
+
+now what is this label and name?
+so name is the api name of that particular table, and api name is the one
+which we use while scripting. in scripting we can refernce this table by Bank
+we have to use this name or api name which is u_bank
+
+
+what is an application?
+it is a collection of similar or relatable functionalities.
+suppose a big company runs a bank and a hotel both so for these they have separate 
+application in one instance
+
+How to create application?
+all -> app engine -> servicenow studio
+
+scoped application => both bank and hotel app are isolated so they won't change or
+affect each other.
+
+when you are inside the bankinng application and goto create new table you can
+see bankinn application instead of global in application field.
+
+here while creating table here a create module checkbox it means this table shows
+as a module too inside all
+
+
+How to create the unique id for bank table?
+you stay on the page of creating table where you are creating the table of bank
+then below you find controls tab where you find a field with checkbox called
+auto number(this will automatically incrementing)
+Prefix = BANK
+Number = 1000 (starting number)
+Number of digits = 7
+eg : Record	Generated ID
+1st	BANK0001000
+2nd	BANK0001001
+3rd	BANK0001002
+
+The Extensible checkbox in ServiceNow means:
+
+It allows other tables to inherit (extend) this table in the future.
+
+Simple example
+
+Suppose you create a table:
+
+Bank
+
+Bank Name
+IFSC Code
+Address
+
+If you check Extensible ✅, later you can create another table:
+
+Private Bank (extends Bank)
+
+Bank Name ✅ (inherited)
+IFSC Code ✅ (inherited)
+Address ✅ (inherited)
+Interest Rate (new field)
+
+Or another table:
+
+Government Bank (extends Bank)
+
+Bank Name ✅
+IFSC Code ✅
+Address ✅
+Government Scheme (new field)
+
+Note: while creating private and govt. bank you have to give reference of this
+bank table in their extends table field
+
+So Private Bank and Government Bank automatically get all the fields from Bank.
+
+If Extensible is NOT checked ❌
+
+No other table can extend your Bank table. It becomes a standalone table.
+
+
+
+
+
+important : Remote Table checkbox ka matlab h agar mai ye table ko mongodb me store
+krna chahu to ye enable karke, api se connect krdo tab vo data usme load kardega.
+
+right click -> configure -> form builder. then you can move the fields and place 
+wherever you want to keep them.
+
+list layout => the records that we added in the table
+
+now there are 2 terms that we discuss : personalization and configuration
+personalization = setting up the things for me only according to my choice
+eg => i want bank name first in list and bank address at last. so click on setting 
+or gear button then reorder them.
+so now bank name is seeing at first in list and adress is in last but it only
+visible to me. if any other user would seeing the table, he wouldn't be seeing the
+bank name at first. He would be seeing as his own  way as he wants to see.
+
+but configuration is for everyone.these are the things that we implemented for
+everyone. eg: what we have done earlier in form builder
+that is configuration not personalization.
+
+
+breadcrumbs => filters jo upar dikh rhe the  > > > iss form me 
+
+wildcard characters:
+if i simply search in location field by putting delhi then in filter it shows
+me in breadcrumbs that "Location starts with delhi", but if i use 
+*delhi then it searches like "Location contain delhi"
+
+
+above there is Filter option too
+
+to select multiple records => select one then shift key + down arrow then records
+are selected
+
+
+hmm servicenow studio se bhi table ko edit krskte hai and new fields daal skte h
+agar state ya new field jo add ki h vo naa dikhe to form builder me jaake 
+add krlena
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
