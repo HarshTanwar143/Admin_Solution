@@ -1,0 +1,145 @@
+Here's a **ServiceNow Quick Cheat Sheet** for the important fields and properties you've studied.
+
+# Table Fields
+
+| Field                      | What it does                      |
+| -------------------------- | --------------------------------- |
+| **Label**                  | Display name of table             |
+| **Name**                   | Backend/API name                  |
+| **Extends Table**          | Inherit another table             |
+| **Application**            | Scope of table                    |
+| **Auto Number**            | Auto-generate record numbers      |
+| **Create Module**          | Create navigation module          |
+| **Add Module to Menu**     | Put module under an existing menu |
+| **New Menu Name**          | Create a new application menu     |
+| **User Role**              | Role needed to access table       |
+| **Create Access Controls** | Auto-create ACLs                  |
+| **Application Access**     | Cross-scope permissions           |
+
+---
+
+# Dictionary Properties
+
+| Property                | What it does                     |
+| ----------------------- | -------------------------------- |
+| **Type**                | Data type of field               |
+| **Display**             | Field shown in reference lookups |
+| **Mandatory**           | Must fill value                  |
+| **Read Only**           | Cannot edit                      |
+| **Max Length**          | Character limit                  |
+| **Default Value**       | Initial value                    |
+| **Choice**              | Dropdown values                  |
+| **Dependent**           | Depends on another field         |
+| **Reference Qualifier** | Filters reference records        |
+| **Unique**              | No duplicate values              |
+| **Active**              | Enable/disable field             |
+
+---
+
+# Common Field Types
+
+| Type          | What it does        |
+| ------------- | ------------------- |
+| **String**    | Text                |
+| **Integer**   | Whole number        |
+| **Decimal**   | Decimal number      |
+| **Boolean**   | True/False          |
+| **Choice**    | Dropdown            |
+| **Reference** | Link another table  |
+| **List**      | Multiple references |
+| **Date**      | Date only           |
+| **Date/Time** | Date + Time         |
+| **Duration**  | Time duration       |
+| **Journal**   | Timestamped history |
+| **HTML**      | Rich text           |
+| **Script**    | JavaScript          |
+
+---
+
+# Form
+
+| Feature           | What it does                  |
+| ----------------- | ----------------------------- |
+| **Form**          | Shows one record              |
+| **Header**        | Main record info              |
+| **Sections**      | Group fields                  |
+| **Related Lists** | Linked records                |
+| **Buttons**       | Save, Update, Delete          |
+| **Form Layout**   | Reorder existing fields       |
+| **Form Design**   | Drag-drop design              |
+| **Form Builder**  | Build/customize complete form |
+| **Template**      | Auto-fill values              |
+
+---
+
+# List
+
+| Feature               | What it does           |
+| --------------------- | ---------------------- |
+| **List View**         | Shows multiple records |
+| **List Layout**       | Choose visible columns |
+| **List Controls**     | Control list behavior  |
+| **List Calculations** | Sum, Avg, Count        |
+| **Bulk Edit**         | Update many records    |
+| **Personalization**   | Changes only for me    |
+| **Customization**     | Changes for everyone   |
+
+---
+
+# Reference
+
+| Feature                 | What it does                 |
+| ----------------------- | ---------------------------- |
+| **Reference**           | Points to another record     |
+| **Dependent**           | One field depends on another |
+| **Reference Qualifier** | Filters lookup records       |
+
+---
+
+# System Fields
+
+| Field              | What it does      |
+| ------------------ | ----------------- |
+| **sys_id**         | Unique ID         |
+| **sys_created_on** | Created date      |
+| **sys_created_by** | Created by        |
+| **sys_updated_on** | Last updated date |
+| **sys_updated_by** | Last updated by   |
+| **sys_class_name** | Child table name  |
+| **sys_mod_count**  | Update count      |
+
+---
+
+# Configure Options
+
+| Option                  | What it does                        |
+| ----------------------- | ----------------------------------- |
+| **Configure Label**     | Change display label                |
+| **Configure Choice**    | Manage dropdown values              |
+| **Configure Style**     | Color/icon/font rules               |
+| **Dictionary Override** | Override inherited field properties |
+
+---
+
+# Application Access
+
+| Option                  | What it does                    |
+| ----------------------- | ------------------------------- |
+| **Can Read**            | Allow reading                   |
+| **Can Create**          | Allow creating                  |
+| **Can Update**          | Allow updating                  |
+| **Can Delete**          | Allow deleting                  |
+| **Allow Configuration** | Allow other scopes to configure |
+
+---
+
+# Table Controls
+
+| Option          | What it does          |
+| --------------- | --------------------- |
+| **Extensible**  | Can be extended       |
+| **Live Feed**   | Enable activity feed  |
+| **Auto Number** | Auto-generate IDs     |
+| **Create ACLs** | Create security rules |
+
+This covers almost all the important fields and properties from your ServiceNow notes in a compact revision format.

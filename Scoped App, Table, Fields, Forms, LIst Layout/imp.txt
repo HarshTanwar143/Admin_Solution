@@ -1,0 +1,884 @@
+ Each entry in a table is a record. Every record is identified by a unique
+32-character GUID called sys_id.
+
+○ System Tables: No prefix (e.g., incident, user).
+○ Global Custom Tables: Prefixed with u_ (e.g., u_car_requests).
+○ Scoped Custom Tables: Prefixed with Scope ID (e.g., x_acme_app_table).
+
+2. Out-of-the-Box (OOB) Tables
+OOB Tables are tables that come pre-installed with the ServiceNow platform. They contain
+built-in business logic, fields, and workflows.
+● Task (task): The parent table for all work-related processes.
+● Configuration Item (cmdb_ci): The base table for the CMDB.
+● User (sys_user): Stores employee/user details.
+● Group (sys_user_group): Stores teams and queues.
+● Location (cmn_location): Stores physical addresses/sites
+
+
+
+Types of the tables:
+Base table
+core table
+custome table
+M2M table
+database view
+
+
+In ServiceNow, the **backend/API name** of a many-to-many (junction) table is typically:
+
+```text
+m2m_<table1>_<table2>
+```
+
+### Example
+
+If you create a many-to-many relationship between:
+
+* `incident`
+* `change_request`
+
+The junction table backend name could be:
+
+```text
+m2m_incident_change_request
+```
+
+The **table that stores the definition** of many-to-many relationships is:
+
+```text
+sys_m2m
+```
+
+**In short:**
+
+* **Junction table backend name:** `m2m_<table1>_<table2>`
+* **Many-to-many definition table:** `sys_m2m`
+
+
+
+imp:
+Let's use a **real bank** as an example. This is almost exactly how ServiceNow is used in companies.
+
+---
+
+## 🏦 Scenario: ABC Bank
+
+ABC Bank has:
+
+* 100 branches
+* 500 employees
+* Customers
+* IT team
+
+---
+
+# 1. `sys_user` (Users)
+
+This table stores **all people**.
+
+| Name   | Role           |
+| ------ | -------------- |
+| Ramesh | Branch Manager |
+| Rahul  | Teller         |
+| Priya  | Loan Manager   |
+| Amit   | Customer       |
+
+Whenever someone logs in, their record comes from **`sys_user`**.
+
+---
+
+# 2. `task` (Parent Table)
+
+Imagine Rahul (Teller) reports:
+
+> "The cash counting machine is not working."
+
+A **Task** is created.
+
+Every work item in ServiceNow is a task.
+
+Think of **Task** as a **blank work template**.
+
+It contains common fields:
+
+* Number
+* State
+* Assigned To
+* Priority
+* Description
+
+Many tables inherit these fields.
+
+---
+
+# 3. `incident`
+
+Rahul's complaint becomes an **Incident**.
+
+| Number    | Description                       | Assigned To |
+| --------- | --------------------------------- | ----------- |
+| INC001005 | Cash counting machine not working | IT Support  |
+
+**Incident = Someone reports an issue that needs fixing.**
+
+Examples:
+
+* Printer not working
+* ATM offline
+* Laptop broken
+* Internet down
+
+---
+
+# 4. `problem`
+
+Suppose every Monday the ATM goes offline.
+
+Incidents:
+
+* Monday → ATM down
+* Tuesday → ATM down
+* Wednesday → ATM down
+
+Instead of fixing it every day,
+
+IT creates **one Problem**:
+
+> "ATM software crashes because of an outdated driver."
+
+Now engineers investigate the **root cause**.
+
+**Incident = Issue**
+
+**Problem = Why the issue keeps happening**
+
+---
+
+# 5. `cmdb`
+
+CMDB stores **everything the company owns**.
+
+ABC Bank owns:
+
+| Asset           |
+| --------------- |
+| ATM-101         |
+| Dell Laptop     |
+| Oracle Database |
+| Web Server      |
+| Router          |
+| Printer         |
+
+All are stored inside **CMDB**.
+
+When an incident occurs:
+
+> ATM not working
+
+IT immediately knows:
+
+* ATM Location
+* Serial Number
+* Warranty
+* Vendor
+* Installed Software
+
+because it's stored in CMDB.
+
+Think of CMDB as the company's **inventory register**.
+
+---
+
+# 6. `sys_user_grmember`
+
+Suppose Rahul works in two departments.
+
+Groups:
+
+* Cash Team
+* ATM Team
+
+Relationship:
+
+| User  | Group     |
+| ----- | --------- |
+| Rahul | Cash Team |
+| Rahul | ATM Team  |
+
+This relationship is stored in
+
+`sys_user_grmember`
+
+This is simply
+
+**User ↔ Group Mapping**
+
+---
+
+# 7. `incident_metric`
+
+Manager asks:
+
+> How long did Incident INC001005 take to resolve?
+
+ServiceNow tracks:
+
+| Incident  | Time       |
+| --------- | ---------- |
+| INC001005 | 2 hours    |
+| INC001006 | 35 minutes |
+| INC001007 | 5 hours    |
+
+These statistics are stored in
+
+`incident_metric`
+
+This table is mainly used for:
+
+* Reports
+* Dashboards
+* SLA calculations
+* Performance analysis
+
+---
+
+## Complete Flow
+
+```
+Employee
+   │
+   ▼
+sys_user
+   │
+   ▼
+Reports issue
+   │
+   ▼
+incident
+   │
+   ▼
+inherits from
+task
+   │
+   ▼
+IT checks
+cmdb
+   │
+   ▼
+Repeated issue?
+   │
+   ├── No → Resolve Incident
+   │
+   └── Yes
+          ▼
+       problem
+```
+
+Meanwhile:
+
+* **`sys_user_grmember`** tells ServiceNow **which groups the employee belongs to**.
+* **`incident_metric`** records **how the incident performed** (resolution time, SLA, etc.).
+
+### Easy way to remember
+
+* 👤 **`sys_user`** = Who is the person?
+* 📋 **`task`** = The parent work record.
+* 🚨 **`incident`** = Someone reported a problem.
+* 🔍 **`problem`** = Find the root cause of repeated incidents.
+* 🖥️ **`cmdb`** = Company's IT inventory.
+* 👥 **`sys_user_grmember`** = Which groups is the user in?
+* 📊 **`incident_metric`** = Statistics about incidents (time, SLA, performance).
+
+
+Task is the parent (base) table that stores common work-related fields. Other 
+tables like Incident, Problem, and Change Request inherit these fields instead of 
+creating them again.
+
+Task (Parent) defines:
+
+Number	Short Description	Assigned To	State	Priority
+
+
+
+### 1. Extended Table (Inheritance)
+
+**Simple Definition:**
+A table that **inherits fields and behavior from a parent table**.
+
+**Example:**
+
+* Parent: `task`
+* Child: `incident`
+
+The **Incident** table automatically gets fields like:
+
+* Number
+* State
+* Priority
+* Assigned To
+
+from the **Task** table.
+
+**Backend/System Field:**
+
+* `sys_class_name` → Stores which child table the record belongs to (e.g., `incident`, `problem`).
+
+---
+
+### 2. Referenced Table (Reference)
+
+**Simple Definition:**
+A field that **stores a reference (pointer) to a record in another table**. It does **not** inherit fields.
+
+**Example:**
+The **Caller** field on an Incident references the **User** table.
+
+Instead of storing the user's name, it stores the user's **`sys_id`**.
+
+```text
+Incident
+---------
+Caller → Ramesh Sharma
+
+↓
+
+Actually stores:
+
+Caller = 6816f79cc0a8016401c5a33be04be441 (sys_id)
+```
+
+**Backend/System Field Type:**
+
+* Dictionary field type: `Reference`
+* It stores the referenced record's `sys_id`.
+
+### One-line memory trick
+
+* **Extended Table** → **Inheritance ("is-a")** relationship.
+* **Referenced Table** → **Pointer ("has-a")** relationship.
+
+
+**There is no separate backend table name for a "Referenced Table."**
+
+A **reference** is just a **field type** in the **`sys_dictionary`** table.
+
+**In very short:**
+
+* **Reference field type:** `Reference`
+* **Defined in:** `sys_dictionary`
+* **Stores:** `sys_id` of another table's record.
+
+
+
+### **1. Add module to menu**
+
+**Use:** Choose under which **Application Menu** the module will appear.
+
+**Example:**
+You create a **Customer** table.
+
+* Select **Banking Application** →
+
+  ```
+  Banking Application
+     └── Customer
+  ```
+
+---
+
+### **2. New menu name**
+
+**Use:** Create a **new Application Menu**.
+
+**Example:**
+Enter **Bank Operations** →
+
+```
+Bank Operations
+   └── Customer
+```
+
+instead of
+
+```
+Banking Application
+   └── Customer
+```
+
+
+**Journal** is a special field that **keeps a history of notes**. Every new note gets a **timestamp** and **cannot be edited or deleted**.
+
+### Example
+
+**Incident:** Laptop not working
+
+**Work Notes (Journal):**
+
+* **10:00 AM** – Assigned to Rahul.
+* **10:30 AM** – Laptop checked.
+* **11:00 AM** – RAM replaced.
+
+All entries are saved one below another as a history.
+
+**In very short:**
+**Journal = A permanent timeline/history of notes with date & time (append-only).**
+
+
+
+imp:
+system fields (these fields provide metadata for each record in the table):
+sys_id
+sys_created_on
+sys_created_by
+sys_updated_on
+sys_updated_by
+sys_class_name : The table that the record belongs to (used for table inheritance).
+sys_mod_count : A counter that increments every time the record is
+saved/updated.
+
+
+
+Best Practice for Administrators
+AVOID Deleting in Production.
+Best Practice: Deactivate or Archive Instead:
+1. Deactivate: Uncheck the Active box on the table record.
+2. Archive: Use the Archiving module to preserve historical data while removing it
+from the active table.
+3. Remove UI Access: Delete the associated Modules and Application Menu.
+
+
+
+Why Global Scope uses u_
+Purpose: The prefix u_ (for "User" or "Custom") is automatically added to the Name of
+any new field or table created in the Global scope.
+Significance: It serves as a visual indicator that the element is custom-created by the
+customer/administrator.
+How Scoped Applications Use App-Specific Prefix
+Scoped Applications use a different, unique prefix based on the application's unique
+scope name (e.g., x_acme_proj_mgmt_).
+Benefit: This enforces data separation and prevents naming collisions.
+
+
+ Schema Map
+The Schema Map is a graphical tool to visualize relationships between tables.
+
+● Access: System Definition → Tables → Select Table → "Show Schema Map" link.
+● Blue Bars: The table extends or is extended by another (Inheritance).
+● Red Bars: The table references or is referenced by another (Reference fields)
+
+The Dictionary defines the details of every field (column) in every table.
+● Backend Table: sys_dictionary.
+● What it controls:
+○ Data Type: String, Integer, Reference, Date/Time, Choice.
+○ Max Length: Character limit (Default 40 for string).
+○ Mandatory: Is data required?
+○ Read-Only: Can users edit it?
+○ Display: (True/False) Which field is shown when this record is referenced
+elsewhere? (e.g., User table uses "Name" as the Display field).
+○ There can only be one Display=True field per table.
+
+### 1. Dependent Field
+
+**What it is:**
+One field's options depend on the value of another field.
+
+**Example:**
+
+**Category:** Laptop
+
+**Subcategory:** Battery, Keyboard, Screen
+
+If you change:
+
+**Category:** Printer
+
+Then **Subcategory** becomes:
+
+* Ink
+* Paper Jam
+* Toner
+
+👉 **Subcategory depends on Category.**
+
+---
+
+### 2. Reference Qualifier
+
+**What it is:**
+Filters which records appear in a **Reference** field.
+
+**Example:**
+
+**Assigned To** (Reference → User table)
+
+Without Reference Qualifier:
+
+* Rahul
+* Priya
+* Amit
+* Ramesh (all users)
+
+With Reference Qualifier:
+
+* Condition: **Department = IT**
+
+Now only:
+
+* Rahul
+* Priya
+
+are shown.
+
+👉 **Reference Qualifier filters the lookup records.**
+
+### Easy trick
+
+* **Dependent** → **Field depends on another field.**
+* **Reference Qualifier** → **Reference lookup is filtered by a condition.**
+
+Dictionary Field Properties:
+Display
+mandatory
+max length
+read only
+dependent
+reference qualifier
+
+
+Configure Label : sys_documentation
+Configure Choice : sys_choice
+**Very short:**
+
+* **`label`** = The actual **Label field** in the `sys_db_object` table.
+* **`sys_documentation`** = The table used by **Configure → Label** to store display labels/translations.
+
+👉 **`label` is a field.**
+👉 **`sys_documentation` is a table.**
+
+The backend field for the Name (API Name) of a table is:
+
+name ✅
+
+It is stored in the sys_db_object table.
+
+
+
+
+Configure Styles
+Field Styles allow Admins to change the color, font, or add visual dots to list views based on
+field values.
+● Backend Table: sys_ui_style.
+
+Field Styles (sys_ui_style)
+
+What it does:
+Changes the appearance (color, font, icon, or dot) of a field in a list view based on its value
+
+
+
+
+
+
+ sys_db_object.list 
+ sys_db_object.LIST
+
+
+13. Dictionary Override
+When a table extends Task, it inherits the dictionary settings of the parent. 
+Dictionary Overrideallows the child table to change those settings without 
+affecting the parent or other children.
+● Backend Table: sys_dictionary_override.
+
+Parent table: Task
+
+Priority field → Not Mandatory
+
+Child table: Incident
+
+You make Priority → Mandatory
+
+Only Incident is affected.
+Task, Problem, and other child tables remain unchanged.
+
+**********************************************************************************
+Based on your **Tables Administration** notes, here is a **one-page revision sheet**. 
+
+## Backend Tables
+
+| Label / Feature                 | Backend Name              |
+| ------------------------------- | ------------------------- |
+| Tables                          | `sys_db_object`           |
+| Dictionary Entries              | `sys_dictionary`          |
+| Configure Label                 | `sys_documentation`       |
+| Configure Choices / Choice List | `sys_choice`              |
+| Configure Styles                | `sys_ui_style`            |
+| Dictionary Override             | `sys_dictionary_override` |
+
+## Table Types
+
+* **Base Table** → Doesn't extend any table
+* **Core Table** → OOB ServiceNow table
+* **Custom Table** → Created by Admin (`u_` / `x_scope_`)
+* **M2M Table** → Links two tables
+* **Database View** → Virtual joined table
+
+## Table Creation Fields
+
+* Label
+* Name
+* Extends Table
+* Add Module
+* Auto Number
+* Application
+* User Roles
+* Create Module
+* Create Access Controls
+* Application Access
+
+## Common Field Types
+
+* String
+* String (Full UTF8)
+* Integer
+* Decimal
+* Price
+* True/False
+* Choice
+* Reference
+* List
+* Date
+* Date/Time
+* Duration
+* Journal
+* HTML
+* Script
+
+## Dictionary Properties
+
+* Display
+* Mandatory
+* Read Only
+* Max Length
+* Dependent
+* Reference Qualifier
+
+## Important System Fields
+
+* `sys_id`
+* `sys_created_on`
+* `sys_created_by`
+* `sys_updated_on`
+* `sys_updated_by`
+* `sys_class_name`
+* `sys_mod_count`
+* `sys_tags`
+* `sys_domain`
+* `sys_domain_path`
+
+## Important OOB Tables
+
+* `task`
+* `incident`
+* `problem`
+* `change_request`
+* `sys_user`
+* `sys_user_group`
+* `cmdb_ci`
+* `cmn_location`
+
+This covers the important backend names and concepts from your notes in a compact revision format.
+
+
+| `sys_user`                      | `sys_user_group`                               |
+| ------------------------------- | ---------------------------------------------- |
+| Stores **individual users**.    | Stores **groups/teams** of users.              |
+| **Example:** Rahul, Aman, Priya | **Example:** IT Support, HR Team, Network Team |
+
+**Example:**
+
+* 👤 **Rahul** → `sys_user`
+* 👥 **IT Support** (Rahul + Aman + Priya) → `sys_user_group`
+
+******************************************************************************************
+
+Yes. Based on this PDF, here is a **very short exam/interview revision sheet**, with extra focus on **List Controls, List Layout, List Calculations, and related topics**. 
+
+| Topic                   | Very Short Definition                          | Example                       |
+| ----------------------- | ---------------------------------------------- | ----------------------------- |
+| **List View**           | Displays records of a table in rows & columns. | Incident list                 |
+| **Filter**              | Shows only matching records.                   | Active = True                 |
+| **Search Condition**    | Rule used in filters.                          | Priority = 1                  |
+| **Global Search**       | Searches across multiple tables.               | Search "Rahul"                |
+| **List Search**         | Searches only current table.                   | Search in Incident list       |
+| **Condition Builder**   | Creates filters without coding.                | State = New AND Priority = 1  |
+| **AND**                 | All conditions must match.                     | Active=True AND Priority=1    |
+| **OR**                  | Any one condition can match.                   | Priority=1 OR Priority=2      |
+| **Breadcrumbs**         | Shows applied filters.                         | Active=True > State=New       |
+| **Favorites**           | Saves filter for later.                        | Save "My Open Incidents"      |
+| **List Context Menu**   | Right-click on list.                           | Refresh, Group By             |
+| **Column Context Menu** | Right-click column header.                     | Sort, Group By                |
+| **Row Context Menu**    | Right-click a record.                          | Delete, Assign                |
+| **Form Context Menu**   | Menu on form header.                           | Save, Delete                  |
+| **Personalization**     | Changes only for you.                          | Hide a column                 |
+| **Customization**       | Changes for everyone.                          | Add column globally           |
+| **List Layout** ⭐       | Choose visible columns for a list.             | Add "Category" column         |
+| **List Controls** ⭐     | Controls list behavior/features.               | Disable Export                |
+| **List Calculations** ⭐ | Performs Sum, Avg, Min, Max on numeric fields. | Sum of Cost                   |
+| **Bulk Edit**           | Update many records together.                  | Change 20 incidents to Closed |
+
+---
+
+# ⭐ List Layout (Important)
+
+**Definition:** Controls **which columns appear** in a list.
+
+**Path:**
+`Right Click List Header → Configure → List Layout`
+
+**Example:**
+
+* Before: Number, State
+* After: Number, State, Priority, Assigned To
+
+➡️ All users will see it if customized. 
+
+---
+
+# ⭐ List Controls (Very Important)
+
+**Definition:** Controls **how the list behaves**.
+
+**Path:**
+`Right Click List → Configure → List Controls`
+
+### Uses
+
+* ✅ Enable List Edit
+* ✅ Enable Bulk Edit
+* ✅ Show/Hide New button
+* ✅ Restrict Export
+* ✅ Enable/Disable Breadcrumbs
+* ✅ Enable Search
+* ✅ Row Numbering
+* ✅ Related Lists
+* ✅ Hierarchical Lists
+
+**Example:**
+Admin disables **Export**, so users cannot export Incident records. 
+
+---
+
+# ⭐ Omit (Inside List Controls)
+
+**Definition:** Hide a UI action/button.
+
+**Example:**
+
+* Omit New Button ✅
+* Users cannot create new Incident from the list.
+
+---
+
+# ⭐ List Calculations
+
+**Definition:** Shows calculations on numeric columns.
+
+**Path:**
+`Right Click Numeric Column → Configure → List Calculations`
+
+### Functions
+
+* Sum
+* Average
+* Minimum
+* Maximum
+* Count
+
+**Example:**
+Priority column values:
+
+```
+1
+2
+3
+4
+```
+
+Sum = **10**
+Average = **2.5** 
+
+---
+
+# Wildcards & Operators
+
+| Operator     | Meaning        | Example           |
+| ------------ | -------------- | ----------------- |
+| `*`          | Any characters | `*serv*`          |
+| `!=`         | Not equal      | Priority != 1     |
+| `LIKE`       | Contains       | server            |
+| `STARTSWITH` | Begins with    | admin             |
+| `ENDSWITH`   | Ends with      | @gmail.com        |
+| `ISEMPTY`    | Empty field    | Assigned To       |
+| `ISNOTEMPTY` | Not empty      | Category          |
+| `IN`         | One of many    | 1,2,3             |
+| `NOT IN`     | Exclude values | Closed, Cancelled |
+| `BETWEEN`    | Range          | Jan–Mar           |
+
+---
+
+# Personalization vs Customization
+
+| Personalization | Customization           |
+| --------------- | ----------------------- |
+| Only for you    | For everyone            |
+| Gear icon       | Configure → List Layout |
+| User level      | Admin level             |
+
+---
+
+# One-line Revision
+
+* **List View** → Shows records.
+* **Filter** → Shows matching records.
+* **Breadcrumbs** → Shows active filters.
+* **Favorites** → Save filters.
+* **List Layout** → Decide visible columns.
+* **List Controls** → Control list behavior.
+* **List Calculations** → Sum/Avg/Min/Max.
+* **Bulk Edit** → Update many records.
+* **Context Menu** → Right-click actions.
+* **Global Search** → All tables.
+* **List Search** → Current table only.
+
+These are the most interview- and certification-relevant points from the PDF. 
+
+*********************************************************************************
+
+This PDF covers **Form View & Administration**. Here's the gist in very short:
+
+* **Form** – Displays a single record. 
+* **Components of Form** – Header, Body, Sections/Tabs, Related Lists, Buttons. 
+* **Form Personalization** – Changes only for the current user. 
+* **Form Customization** – Changes for all users (Admin). 
+* **Form Menu** – Options like Configure, Save, Delete, etc. 
+* **Form Layout** – Add/remove and reorder existing fields. 
+* **Form Design** – Drag-and-drop visual design, create sections/tabs. 
+* **Form Builder** – Complete visual tool to build and customize forms (including fields). 
+* **Form Templates** – Auto-fill predefined values in new records. 
+
+### One-line revision
+
+* **Form** → One record.
+* **Personalization** → Only me.
+* **Customization** → Everyone.
+* **Form Layout** → Rearrange existing fields.
+* **Form Design** → Visually design the form.
+* **Form Builder** → Build/customize the whole form.
+* **Form Template** → Auto-fill default values.
+
+
+
+
+
+
+

@@ -1,0 +1,113 @@
+**Yes.** ✅
+
+ServiceNow Studio is the **best place to create application artifacts**, including:
+
+* ✅ Tables
+* ✅ Fields
+* ✅ Modules
+* ✅ Client Scripts
+* ✅ Business Rules
+* ✅ UI Policies
+* ✅ Flows
+* ✅ Script Includes
+
+But **not**:
+
+* ❌ Users
+* ❌ Groups
+* ❌ Delegates
+* ❌ User administration
+
+So, **yes, you can create tables in Studio.**
+
+
+
+you only create roles in this studio.
+
+
+
+
+
+
+Question : then if i have to do everything through main dashboard then why there 
+is this servicenow studio? 
+
+Answer:
+Because they have different purposes:
+
+ServiceNow Studio → Used by developers to build applications (tables, scripts, flows, modules, UI policies, etc.).
+Main ServiceNow Dashboard (Platform UI) → Used to manage data and administration (users, groups, roles, incidents, requests, approvals, etc.).
+
+In short:
+Studio = Build the application.
+Main Dashboard = Use and administer the application.
+
+
+
+
+Question: when i created a user inside the application scoped of technova and then 
+i switch to the global. but in global also these users are visible, why?
+
+
+And
+
+Question : i created and entered in to the banking application scope, there in 
+groups i can able to see all technova groups too, but how and why? 
+
+Answer: 
+**No, it is not violating scope isolation.**
+
+**Why?**
+
+* **Groups (`sys_user_group`) are global platform records**, not scoped application records.
+* **Application scope isolates application artifacts** (tables, scripts, UI policies, etc.), **not platform data** like users, 
+groups, and roles.
+
+So your Banking app can still see the TechNova groups because they exist in the shared **`sys_user_group`** table.
+
+**In short:**
+**Scope isolates app components, not shared platform records like Users and Groups.**
+
+
+
+
+
+
+user -> roles, groups, delegates
+role -> only role related things
+group -> roles, group members
+
+
+
+
+
+
+
+
+By default, **creating a delegate does not require approval**. It simply creates a delegation record. Whether approval is 
+needed depends on how the ServiceNow instance has been configured.
+
+### Scenario 1: You are an Admin and create a delegate
+
+* ✅ Usually **no approval** is required.
+* The delegate becomes active immediately (based on the start/end dates).
+
+### Scenario 2: You are a normal user and create a delegate for yourself
+
+* ✅ By default, **no approval** is required.
+* If you have permission to create delegation records, the delegation becomes active immediately.
+
+**In short:**
+**Default ServiceNow:** ❌ No approval for delegate creation.
+**Customized instance:** ✅ Approval may be added if the organization configures it.
+
+
+
+
+
+
+
+
+
+
+

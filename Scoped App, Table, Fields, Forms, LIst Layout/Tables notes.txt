@@ -434,13 +434,27 @@ add krlena
 
 
 
+Application Access Tab
+
+Controls whether other application scopes can access this table.
+
+Example:
+You create a Customer table in the Banking App.
+
+Allow access ✅ → Other apps (e.g., Loan App) can use it.
+Allow access ❌ → Only the Banking App can use it.
 
 
 
 
 
+Application Access → Controls whether other application scopes can access this table.
+ACL (Access Control) → Controls which users/roles can read, create, update, or delete records.
 
+In short:
 
+Application Access = App-to-app security.
+ACL = User/role security.
 
 
 
