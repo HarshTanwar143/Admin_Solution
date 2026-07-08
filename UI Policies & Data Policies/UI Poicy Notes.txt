@@ -1,0 +1,164 @@
+UI Policies : These are the policies or configurations in servicenow to handle MVR 
+of fields. M = mandatory, V = visibility, R = Readonly based on some conditions.
+
+UI policies works only on Record form
+Data policies works on form as well as data ingestion.
+
+eg: if you fill data to the form then UI policies will work
+but if data is being ingested from some other source then data policies will work. for
+example like from excel file from any other integration etc.
+
+eg. : suppose you are adding UI poliy in bank table form like without choosing the
+state you can't choose city.
+
+first create UI policy like when this particular ui policy will run like here
+whenever state is anything then this ui policy come in to role. then 
+we setup UI Policy Actions
+
+Data Policies:
+
+Apply to import set means this data policy will be applied on the data
+which is being ingested or import.
+
+Apply to SOAP : soap is nothing but an integration, like if there is any 
+integration happening like any other api data is coming and being inserted
+it should be applied on that also.
+
+in data policy rules, we have only 2 properties i.e. mandatory and read only
+visibe is not there.
+
+
+UI and data policies are the form behaviours
+
+UI policy is only applied on the data of the form while entring in the form.
+data policy is applied on the data that we imported. and it doesn't have visibility property.
+
+
+Data Lookup rules:
+for selecting a particular state, only that state city will be visible
+so, for this first apply ui policy to make state and city visible. then use
+lookup rules, by which we can make the city field dependent on the state.
+once we select the state, then this data lookup rules will run on backend 
+and the choices corresponding to the state will be populated in the city field.
+
+in data lookup we have target field and match field. in match field we mention
+state is rajasthan and in target field we define the city. there this state i.e.
+rajasthan is dependent.
+
+Dictionary Override: we are overriding the property of a the dictionary or field
+which inherit from other table.
+eg: in Branch table, state is mandatory but when i create account table and inherit
+the branch table to it then i can make this state not mandatory. this is dictionary
+override.
+
+There is a base table in sn, i.e. Task. your incident table, problem table, 
+change table all are extended from this one only
+
+VIMP:
+SLAs are only created by the tables which are exteded by Task table. 
+
+imp:
+Requirement 5: Branch Code & Account Number → Always Read-Only
+Since these two fields live on two different tables (Branch and Bank Account), you 
+need two separate UI Policies — one per table.
+
+
+Vimp:
+Yes — use this no-script trick:
+
+1. In **Conditions**, click **Add Filter Condition**.
+2. Choose field: **Created** (sys_created_on)
+3. Operator: **is not empty**
+4. Leave **On load** ✅ checked, **Reverse if false** ✅ checked.
+5. Save.
+
+**Why this works:** A new record has no "Created" date yet (it's blank until saved), but an existing record already has one. So:
+- New record → Created is empty → condition false → not read-only
+- Existing record → Created is not empty → condition true → read-only ✅
+
+Do this for both policies (Branch Code and Account Number).
+
+
+imp:
+"Clear the field value" — if checked, it wipes out whatever value is in that 
+field whenever this UI Policy action triggers.
+Example: Say you have a policy: "If Account Type = Closed → clear Current 
+Balance." When someone marks the account as Closed, the Current Balance field 
+automatically gets emptied out (set to blank/0), instead of just becoming 
+read-only with the old value still sitting there
+
+hey, then if i again change the accpunt type will it put my previous 
+current balance? in very shortNo — once cleared, the old value is gone for 
+good. Changing Account Type back won't restore it; the field just stays blank/0 
+unless someone manually re-enters a value.
+
+To "restore" it you'd have to manually:
+
+Re-type the value back in, or
+Use a script (business rule storing old value in a variable before 
+clear, then restoring it) instead of the simple "Clear the field value" checkbox.
+
+
+
+imp:
+**Global** = should this UI Policy apply to **all views** of the form (Default, Mobile, Service Portal, etc.) or just one specific view.
+
+**Example:** Say your Transaction form has two views — "Default" and "Mobile". If **Global ✅ is checked**, your "Account & Amount mandatory" rule applies on both Default and Mobile views. If **unchecked**, it only applies to whichever one view you pick (e.g. only Default) — the Mobile view won't enforce it.
+
+For your case, keep it ✅ checked — you want the rule everywhere, not just one view.
+
+
+imp:
+transaction amount me 0.00 is also considered as a value
+
+
+imp:
+i want that this none will be displayed by default to do this? in very shortDeliberated default dropdown value configuration methodsDeliberated default dropdown value configuration methodsThat's just the field's Default Value setting on the dictionary entry — here's how:
+
+Go to Status field → open dictionary entry (or right-click field label → Configure Dictionary).
+Find Default Value — leave it blank (this makes "-- None --" show by default).
+
+
+
+
+
+
+
+Question : 
+Yes — that's exactly what Choice List Specification is for.
+Example: If you want your Transaction.Status field to show the same choices as Incident.State field (borrow from another table), you'd set:
+
+Choice table = Incident
+Choice field = State
+
+Then Transaction's Status dropdown shows Incident's State choices (New, In Progress, Resolved, etc.) automatically instead of maintaining separate choices.
+⚠️ Only useful if both fields' choices genuinely should stay in sync. For your case (Status ≠ Account Type), don't link them — keep separate choice lists per field, as I said.
+
+
+imp q: transaction table me status ki choices me mai chah rha hu ki dusri table 
+ke choice access kru, to choice list specification me use kiya but ye
+none hi dikha rha h.
+
+
+imp: created --> is not empty, matlab jo record insert hochuka hai, unn pe lgana
+hai ui policy.
+
+
+
+
+
+
+
+imp: ui action can be multiple, but for each table you have to create 
+new ui policy.
+
+*****************************************************************************
+IMPORTANT FIELDS INSIDE ADVANCE VIEW
+1. Default Value
+2. Calculated Valu
+3. Dependent Field
+4. Choose List Specification
+
+
+
+

@@ -1,0 +1,90 @@
+1. Project Table:
+project name
+who's managing this project(managed by)
+status (Planning, In Progress, Completed, On Hold)
+number of developers needed
+number of QAs needed
+number of Architects needed
+expected finish date
+priority (High, Medium, Low)
+description of project
+unique ID for project
+Project logo field
+Skills field (references to skills table that shows list of required skill for 
+current project, this field should be of type list, allowing users to select multiple skills)
+
+
+2. Resource Table:
+assigned role(developer, qa, architect)
+which group they belong to
+who is actually assigned
+current status of assignement (approval request, approved, rejected)
+on what date someone was assigned
+who requested assignment
+any comment about the assignment
+and which project it's for
+each assignment has unique Id
+
+3. Skills Table:
+different skills employees can have
+skill name
+category (technical, management, qa, devops)
+description
+
+4. People Skill:
+link employees to the skills they possess
+indicate their proficiency level ( beginner, intermediate, expert) for each skill
+
+5. Projects and assignemnts:
+when looking a project -> easily see all the people assigned to it.
+when looking at a skill -> easily can see all the people who have that skill
+when looking at a user -> we should see all their skills and their assignments
+
+6. Project issue table:
+this table should be created by extending Task table(so it inherits core workflow capabilities like
+status field and sla tracking)
+status should include choices like new, in progress, on hold, resolved, closed
+table must have fields like issue title, issue description, project, assigned to, assignment group, resolution notes, priority(high, medium, low) and severity(critical, major, minor)
+
+7. requirement 7
+
+8. requirement 8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

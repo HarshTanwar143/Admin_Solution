@@ -1,0 +1,23 @@
+UI POLICY:
+UI Policy backend name => sys_ui_policy
+Action Table => sys_ui_policy_action
+System UI → UI Policies
+Function = (Mandatory, Read-only, Visibility)
+Each UI Policy (condition) can have multiple actions (one row per field affected).
+Order = Defines the sequence of execution. Policies with a lower order number run
+before those with a higher number. Crucial for resolving conflicting actions.
+
+data type of condition : Condition Builder
+backend name of applicaton : sys_scope
+ UI Policy Actions (Related List)
+
+DATA POLICY:
+Backend Table Name => sys_data_policy2
+Function = Mandatory, Read Only , cannot handle visibility
+Ensuring data consistency when records are created via Forms,
+REST APIs, or Import Sets
+Enforcement Control Fields : Inherit, Reverse if false, Apply to import set, 
+apply to soap, use as ui policy on client(If checked, the Data
+Policy's rules are also enforced on the clientside form, This is the internal
+mechanism used for Convert to UI Policy.)
+Application Global By Default

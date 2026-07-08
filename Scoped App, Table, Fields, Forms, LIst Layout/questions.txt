@@ -1,0 +1,61 @@
+Q: project id ko auto number kaise du?
+A: auto number se create karlo then field label name change karlo
+
+Q: List datatype doge to reference me vo add bhi karna hog?
+
+
+
+Simple example
+On your Project form, the "Skills" field is type List, referencing the Skill table.
+When creating a project, you click the field and see a slushbucket/multi-select popup:
+Available Skills          Selected Skills
+- Java                     - Java ✔
+- Python          →        - Node.js ✔
+- Node.js                  - AWS ✔
+- AWS
+- SQL
+You pick Java, Node.js, AWS — all three get stored in that one field for that project record, comma-separated internally as sys_ids (e.g., a1b2c3,d4e5f6,g7h8i9).
+
+
+Q: choices me Hisar | Hisar aise hi dikhenge kya?
+
+req 1 : Restricted via ref qualifier (Req 8)
+Skills (Required)List field → Skill tableType = List, allows multi-select
+
+Q: auto number karke project id ko har bbaar jab m new pe click krke vapas jaa rha hu, to ye number badaye jaa rha h?
+ans : aisa hoga hi
+
+req 2 : Assigned ToReference → sys_userRestricted via ref qualifier
+
+req 6:
+Assigned ToReference (inherited from Task, or reference sys_user)Assignment GroupReference (inherited from Task, sys_user_group)Resolution NotesString (multi-line)PriorityChoiceHigh, Medium, Low
+
+priority is inherited from task table, and it is number so i can't create another priority field
+
+
+req 8 :
+Here are all the user-reference fields needing the qualifier:
+
+Project table → Project Manager
+Resource Allocation table → Assigned To
+Resource Allocation table → Requested By
+Project Issue table → Assigned To (inherited from Task)
+
+This version doesn't show an "Advanced" dropdown — it directly gives you a filter builder (simple qualifier). Here's what to do:
+
+Click on "-- choose field --" dropdown.
+Select Roles (dot-walk option, since Role is a related list on User) — look for Roles > Role or similar.
+Set operator: is
+Set value: manager
+Click Update.
+
+MOST IMP DOUBT:
+1. Project Issues me Assigned to me ve group me jo users add kiye the ve nhi aarhe.
+Ans: ye Assigned To field inherited h task table se and task table me 
+phle se hi reference qualifier etc lage hue h, iss liye ye priya gupta user
+nhi dikha rhi thi, so maine isko remove kiya fields se and Assign_to krke
+meri custom field bnai and reference diya User ka, and ye abb chal rha hai
+
+
+
+
