@@ -1,0 +1,380 @@
+A). ACLs = these are the rules and policies that we define to restrict or grant 
+access to servicenow data for its operations like Create Update Read Delete(CRUD)
+operations.
+
+B). Types of ACLs:
+1. Table Level
+2. Field Level
+
+There is a particular way to maintain the ACLs. First, SN. checks is user has the
+access of Table Level, is he allowed to read the data of that table. then SN.
+will check is it having Field level access.
+
+you are not allowed to read these particular records then we apply field level
+Acl, but first he should have the table level access otherwise field level access
+is not going to work.
+
+C). Common Operations:
+Create, Read, Update, Delete (CRUD)
+
+
+D). Let's take a scenerio: We have a group called branch manager. now we are 
+creating a scenerio that the branch manager can only see or read the records of his
+branch only, not the other branches. and then we also implement the thing that
+branch manager can only see the bank accounts which are associated with his branch.
+not the other branch accounts.
+
+1. create a demo manager, then impersonate this demo manager and check is it 
+able to see the bank branch table or not? so it isn't able to see that table.
+we have to give him visibility for that app menu or that module, for that click
+on icon shows on all -> that menu or that module. then open it then in roles
+give that  role (in our case it is manager) which can see these menu or module.
+(dono ka access ya visibility me manager role dena hoga, module ke me bhi and app 
+menu ke me bhi)
+
+now that harsh.manager able to see this module in his all menu bar, but when he 
+click on that module then it ACLs restricted him to see that branch table.
+
+i. first elevate the role to security_admin
+ii. then when you open the branch table without impersonation, in bottom you see
+4 by default access controls or Acls which are created by SN itself. Whenever you 
+create a table then automatically a default role has also been created by SN. that role
+has these 4 Acl permissions to Read write update and delete.
+(by the way you can also give this default role to the user then user can able to 
+perform these crud ops. but generally we don't give this default role. we create 
+new ACLs)
+
+Vimp. : Access Control x_2125841_bankin_0_branch = sys_security_acl
+
+
+Note: without elevating your role to security_admin you don't have the option to create 
+ACLs. So, Security_admin is the one who can perform sensitive tasks with the ACLs
+
+iii. click on new to create new acl, then here we have type( on what we are applying
+the acl), operations(like crud etc), Name (on which table we apply this)
+
+vimp: beside name we also have a dropdown, if we select none, then this acl is by
+default for table level acl. but if we choose any option from that choice/dropdown
+then it is a field level acl.
+
+
+iv. applies to condition and data condition:
+applies to condition: all the records that follow our condition or filter only on 
+those records this acl will be applied. if the records which will not matching 
+our condition those will be excluded from this ACL, they will be visible to everyone.
+
+
+
+below we have 3 features(or conditions):
+a). Role = to read the content of this table the user should have these roles. if 
+i give 5 roles in it and user can have any one of them out of those 5 roles then 
+user can read the content.
+b). Security Attribute Condition = we can ignore them for now these are some advance
+condition we'll cover them in developer.
+c). Data Condition : here you define which particular record you can read.(it is not for 
+fields, fields are different, it is only to specify the records)
+
+
+v). now after adding acl, you can check by imersonation, and you find this table
+is now visible to harsh.manager and read only
+
+
+
+Short trick : kon use krega iss table ko? manager. to manager kya kya kar skta hai
+iss table pe? read write. so ek acl banao iss table pe for manager role which can 
+do read and write. (now any user which have this branch manager role can have
+the access of this table)
+
+right now, this harsh.tanwar can see complete table, and now i gave him permission
+to write too. so now if you impersonate him and see the branch table you find 
+all the records of other branch also. because till now we have only applied the
+table level ACL. But this is a data breach i want that harsh.tanwar can only see
+his branch records only. not all records (including his branch and other branch).
+
+so for this we have to go to our recently created read and write acl, then go to 
+data condition  and choose the field as branch manager then there are 2 things
+first : "is" and second "is(dynamic)" so if we want to give the permission to 
+a specific named manager then also we can do statically and give name, but in our
+case we allow all managers to see the content but want to see his own branch. so, 
+choose is(dynamic) then choose "me".
+
+
+
+****************************************************************
+now we do 2nd task, which is this branch manager can see only those bank accounts
+which are associated to his branch only. like harsh.manager is the manager of sbi
+then he should only able to see allthe accounts of sbi bank of his branch.
+
+on the basis of branches we will filter the bank accounts.
+
+steps:
+first elevate the admin to security_admin
+then go to bank account and give the access of the modules and menu to the bank manager.
+
+
+vvimp: 
+Right now in bank account we don't have the field branch manager, we have this
+branch manager field in branch table. so for accessing the branch manager we have 
+to traverse from bank account to branch table. this is known as Node working.
+
+we want to see the bank account's parent fields so click on the "Show Related Fields"
+in data condition. then you see Branch => Branch Field, click on it. then again
+option the choice dropdown you'll see all the fields of branch
+
+
+
+
+NOTE: if we have to do more complex task like if a branch hai only 4 accounts then 
+only manager can see all his branch accounts then we enable advance checkbox 
+and do advance conditioning through script.
+
+
+**************************************************************************
+after clicking the new to create ACL you see Decision Type:
+1. Allow If : is a less restrictive type of ACL ( in this if anyone of the acl will condintion 
+fullfilled then it will give the access) (kind of or)
+2. Deny Unless : is more restrictive type of ACL (its a kind of and condition, like if this Deny unless acl 
+restricting access for you, then no other acl can help you to get out of that issue. it is kind of more strict.
+like if this acl is not passed you will not be able to access this record. then you have to make it deny unless)
+
+NOTE: generally we use allow if only, but if we have very sensitive data then 
+we do make use of Deny unless.
+
+
+Allow If — Access is granted only if the conditions (role/script/condition) evaluate true. If false, access is denied.
+
+Example: Allow If role = branch_manager → only branch managers can read Branch records; everyone else is blocked.
+
+Deny Unless — Access is denied by default, and only allowed if condition is true — but it's stricter: it overrides all other Allow ACLs on that table/field, even ones granted elsewhere.
+
+Example: Deny Unless role = admin on the account_number field → no matter what other ACLs say, only admins can see/edit account_number. Even if another ACL says "Allow If role=branch_manager", it still gets blocked unless they're admin too.
+
+Simple way to remember:
+
+Allow If = adds an opening (permissive).
+Deny Unless = adds a lock that only one specific key can open (restrictive, overrides everything else).
+
+
+Types of ACLs (by Type field):
+
+record – controls access to entire rows/records in a table. E.g., who can read/write Branch records.
+field – controls access to a specific field only. E.g., only branch_manager can edit interest_rate field, even if others can see the record.
+table (used in wildcard *) – applies to the whole table via *.read, *.write etc. as a fallback default.
+ui_page, ui_action, client_callable script, REST endpoint, etc. – special ACL types securing non-table resources like UI pages, Client Callable Script Includes, or Scripted REST APIs.
+
+
+IMP. CRUX:
+so this means this particular acl will only be applied on those records where 
+the branch manager is me ? in very short
+Yes, exactly. This ACL grants access 
+only to the Branch record(s) where the "Branch Manager" field = the currently 
+logged-in user. All other branch records are blocked by this ACL for that user.
+
+Means this data condition filters the data and only allow the final
+filtered records will be visible or applied ACLs on those.
+
+
+simple language:
+1. ye table or field par read write etc ka de rha hu operations.
+2. kon banda access kar skta hai vo de rha hu through roles
+3. iss table or fields me se bhi kitna data dikhana h ya kya data dikhana hai vo decide 
+kar rha hu through data condition.
+
+
+Vimp. eg:
+## Table-Level ACL Examples (record type)
+
+**1. Branch – Read**
+Role: `branch_manager` | Operation: read | Data Condition: `Branch Manager = Me (dynamic)`
+→ A branch manager can only read the branch record assigned to them.
+
+**2. Transaction – Create**
+Role: `teller` | Operation: create | Data Condition: `Branch = User's Branch (dynamic)`
+→ Tellers can only create transactions for their own branch.
+
+**3. Account – Delete**
+Decision Type: `Deny Unless` | Role: `bank_admin` | Operation: delete
+→ No one except bank_admin can delete any Account record, overriding all other Allow ACLs.
+
+**4. Loan Application – Write**
+Role: `loan_officer` | Operation: write | Data Condition: `Status = Pending`
+→ Loan officers can edit loan applications only while status is "Pending" — once approved/rejected, it's locked.
+
+**5. Customer – Read**
+Role: `customer_support` | Operation: read | Data Condition: `Region = Agent's Region`
+→ Support agents can view only customers from their assigned region.
+
+---
+
+## Field-Level ACLs
+
+**1. Account.balance – Write**
+Type: field | Role: `bank_admin` | Operation: write
+→ Only admins can directly edit account balance (regular tellers can't manually change it).
+
+**2. Transaction.amount – Write**
+Decision Type: `Deny Unless` | Role: `senior_teller` | Data Condition: `amount > 100000`
+→ High-value transactions can only be edited by senior tellers; overrides other write ACLs.
+
+**3. Customer.aadhaar_number – Read**
+Role: `compliance_officer` | Operation: read
+→ Sensitive ID field visible only to compliance officers, hidden from everyone else viewing the Customer record.
+
+**4. Branch.branch_manager – Write**
+Role: `regional_head` | Operation: write
+→ Only regional heads can reassign who the branch manager is (regular staff can't change it).
+
+**5. Loan.interest_rate – Write**
+Role: `loan_officer` | Operation: write | Data Condition: `Status = Draft`
+→ Interest rate is editable only while the loan is in Draft status; locked after submission.
+
+********************************************DOUBT RESOLVE**************************
+Yes, you can add data conditions on field-level ACLs too — I did use them in 2 of the 5 examples:
+
+#2 Transaction.amount → Data Condition: amount > 100000
+#5 Loan.interest_rate → Data Condition: Status = Draft
+
+The other 3 (#1, #3, #4) just didn't need one since role alone was enough.
+
+scenerio: like branch manager(ROLE) can only be write/edit(OPERATION) the record 
+when amount > 100000(DATA CONDITION)
+
+SUMMARY :
+Yes, that's correct! Example:
+
+**Role**: `senior_teller` | **Operation**: write | **Data Condition**: `amount > 100000`
+→ Only senior tellers can edit transaction records where amount exceeds 1,00,000.
+
+**Yes**, these 3 are the core things to think about for any ACL:
+1. **Role** – *who* is allowed
+2. **Operation** – *what action* (read/write/create/delete)
+3. **Data Condition** – *on which records* (based on field values)
+
+A couple more to keep in mind alongside these (less frequently, but still important):
+- **Type** – record or field level
+- **Decision Type** – Allow If vs Deny Unless (especially when you want to override other ACLs)
+
+But for 90% of practical scenarios, **Role + Operation + Data Condition** is exactly the right way to think about it.
+
+
+******************************************************************************************************************
+SECOND LECTURE:
+We covered : 
+1. Table Level ACL
+2. Record Level ACL
+
+In this lecture:
+3. Field Level ACL = before applying this, we have to give the access of table 
+level acl to the user role else it show us locked
+4. List Edit ACL (after double click we can edit the list right, but we can restrict
+it by List Edit ACL)
+
+our scenerio : in bank app menu, we have loan table which consist loan and ROI fields
+so the loan manager can't change the ROI. He can only read or see the ROI. 
+so for this we added Field Level ACL.
+
+in this first i have to give read and write access of whole table to the loan 
+manager. then i have to make ROI read only for loan manager so i give
+write access to a superior role(a roal which is bigger than loan manager). suppose
+i give write access to Admin. now, when loan manager open the table then 
+he can't edit the ROI. he can only see it which is read only
+
+
+eg:
+**1. Table Level ACL**
+Type: `*` (wildcard) | Table: Transaction | Operation: read
+→ Controls default read access for the **entire Transaction table**, applies to 
+all records unless overridden.
+
+**2. Record Level ACL**
+Type: record | Table: Branch | Operation: write | Role: `branch_manager` | 
+Data Condition: `Branch Manager = Me`
+→ Branch manager can edit only their own branch record.
+
+**3. Field Level ACL**
+Type: field | Table: Account | Field: `balance` | Operation: write | Role: `
+bank_admin`
+→ Only admin can edit the `balance` field, even if others can edit the rest of 
+the record.
+
+**4. List Edit ACL**
+Type: field | Table: Loan | Field: `interest_rate` | Operation: `list_edit` | 
+Role: `loan_officer`
+→ Controls whether `interest_rate` can be **inline-edited directly from the list
+view** (not the form) — even if form-edit is allowed, list_edit can be blocked 
+separately.
+
+
+
+IMP insight:
+for record level filtering = Data Condition
+field level ops apply = add that Field 
+
+this x_2125841_bankin_0.x_  so this is the prefix of the custom application we 
+are using. (x_2125841_bankin_0.x_bank.loan_manager this is the complete name)
+
+
+most imp:
+by one acl you can give access or restrict to one field only, for multiple 
+fields access or restrict, you have to create multiple acls
+
+Most imp insight:
+agar sirf write table level acl dediya tab bhi locked hi dikhayega. 
+jab tak tum usko read ka nhi doge vo lock hi dikhayega vha. issliye read ka
+dena jruri hai
+
+
+Admin overrides:
+If checked ✅, users with the admin role automatically bypass this ACL — no need 
+to satisfy role/data condition.
+
+Example: Your ACL says "only branch_manager can edit Branch records." If Admin 
+Overrides is checked, an admin user can still edit any Branch record even without 
+the branch_manager role.
+If unchecked ❌, even admins must satisfy the ACL's conditions like everyone 
+else.
+
+Protection policy:
+Controls whether this ACL record itself can be edited/deleted by others later — it's
+ about protecting the ACL configuration, not the data.
+Example: You set Protection Policy = "Protected" on your critical Account.balance 
+write ACL. Now, no one (even devs) can accidentally delete or modify that ACL 
+record without special permission — keeps your security rule safe from being 
+tampered with.
+
+
+4. List edit:
+we won't allow bulk edit or list edit then we create new acl and choose
+list edit in operations(from where we choose read, write etc)
+
+then in role give admin only, so that only admin can do list edits not any other
+person can do. now it apply for all the fields that admin can only do list edits
+on all the fields.
+
+but if i want that only total account list edit will be disabled for loan manager
+then i have to allow only admin can do list edit in total accountss
+
+
+
+
+SIMPLE MINDMAP FOR ACLs:
+ELEVATE USER
+MAKE VISIBILITY OF APP MENU AND MODULE
+DECIDE TYPE, OPERATION, TABLE, FIELD, ROLE, DATA CONDITION
+IMPERSONATE THE USER AND CHECK THE CONTROLE ACCESS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

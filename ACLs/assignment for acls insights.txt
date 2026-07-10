@@ -1,0 +1,172 @@
+REQUIREMENT 1:
+project manager like mahesh gupta only be able to see his projects which he is handling
+and edit them. 
+
+they can only update the records, not create the new record.
+steps:
+i. elevate to the security_admin
+ii. give module and app menu access to the project manager role so he can see that 
+module.
+iii. give role and check by impersonate
+
+DOUBT QUESTION 1: hey only gave the visibility to the manager for this app menu and 
+only project module, but why he can able to see these other module too? tell me the
+ reason in very short
+
+ANSWER : Reason: The other modules (Create New Project, Create New Skill, Create New Skill Mapping) likely don't have any roles set on themselves.
+When a module has no roles configured, it becomes visible to anyone who can already see the parent Application Menu — and since the manager already qualifies for the App Menu (via technova.manager role), he automatically sees all modules under it that don't have their own restriction.
+Fix: Go to each of those modules → Visibility tab → add the specific roles (e.g., only technova.manager should see "Create New Skill") to restrict them individually — just like you did for the "Projects" module.
+yes kyuki create new skill me visibility me ek bhi roles add nhi tha to, issliye ye inherit hogya 
+automatically. yess when i gave architect this app menu and this create new skill module visibility. now this create new skill has one role
+so that's why it will remove from manager impersonatin all section because now create new skill has one role in it .
+
+DOUBT 2 : req. 1st, when i give read and write access to only project manager 
+then he can edit only the existing records, he can't able to create the new record,
+ is write permission only give access to update the existing records and deny the 
+new creation of records? and if yes then which permission allow to create new 
+record too? 
+
+ANSWER 2 : Yes, correct understanding:
+write operation = only controls update on existing records. It does NOT allow 
+creating new records.
+
+For creating new records, you need a separate ACL with:
+Operation: create
+
+(jab create ka ek new acl bnaya, to ye condition kyu de rhe ho ki when project manager 
+is(dynamic) me? issi liye vha new button nhi show ho rha tha. kyuki abhi to koi create hi nhi hua
+to kaise tum usko fiter krrhe ho project manager se. issliye isko htao data condition ko isme se)
+
+
+
+
+
+
+MOST IMPORTANT: AGAR MAI CHAHTA HU KI TABLE CREATE HOTE HI SAARE CRUD OPERATION 
+KISI SPECIFIC USERS KO MIL JAYE THEN UNN SBHI USERS KO VO ROLE DEDO JO 
+BY DEFAULT CREATE HUA THA WHILE CREATING THE TABLE.
+
+IMP. DOUBT : I gave create permission but when mahesh gupta manager click on 
+create new project it shows a blank screen not the creating form of project.
+even i gave him a separate create acl, why is this happen?
+
+ANSWER: alag se create acl ki jrurat nhi, jo Out of the box acls create hue h, uske
+create me hi ye project manager ka role dedo, iss se vo only project pe click 
+krega to vo project list me phunchega and vha se new button se create kar payega.
+but ye issue nhi tha, main issue hai create new project pe click karne pe empty
+form dikha rha h, project creation form nhi aarha, to iske liye JO TUMNE SEPARATELY
+READ ACL BNAYA THA USME TUMNE JO DATA CONDITION DI THI KI PROJECT MANAGER IS ME, USME
+EK OR CONDITION LGAKE YE ORR ADD KRDO KI PROJECT MANAGER IS EMPTY. THEN CHALEGA.
+AND JO CUSTOM WRITE ACL BANAYA THA USME BHI YE PROJECT MANAGER IS EMPTY VALI CONDITION
+OR SE ADD KRDO. VARNA ONLY READ ONLY FORM KHULEGA.
+
+REASON : Because the `Project Manager` field is **empty until the form is 
+submitted** — on a new record, there's no value yet to match against "Me". So 
+the condition fails unless you allow "empty" too.
+
+The same ACL also applies when editing **existing** projects, where you *do* 
+want to check "is this really Mahesh's project?" — so you need both cases handled:
+ empty (new) OR matches Mahesh (existing).
+
+REQUIREMENT 2:
+imp. understanding :
+Correct — **"Requested By"** and **"Assigned To"** are just regular reference fields to Users, **not restricted to managers**. You can put any user there — a Developer, QA, Architect, or Manager.
+
+They're just business data (who asked for it, who's doing the work) — not access-control fields. The actual **access control** depends only on the **Project → Project Manager** field, as discussed.
+
+
+
+hey how can i make like when i select an assigned role, then only those person's which are of that role will be visible in assigned to field. what to do for this?, and current i only allow all managers in requested by field so that only manager can do a request for allocation of persons. tell me in veryshort
+
+
+
+jo project uss project manager ko assign hua hai agar vo in progress ya planning 
+me hoga tabhi vo create kar payeega resource allcation.
+
+
+
+
+
+
+
+VIMP:
+
+how to do 6th req.  is it saying all the memebers don't have the operations role
+they can only read only the ids?Correct interpretation: All Unique ID fields (Project ID, Assignment ID, Skill ID, Skill Mapping ID) should be read-only for everyone except Operations — they can view the ID but not edit it.
+How to do it (Field-level ACLs):
+For each ID field on each table, create a field-level write ACL:
+Example (Project ID field):
+
+Type: field
+Table: Project | Field: Project ID (number/unique field)
+Operation: write
+Decision Type: Deny Unless
+Requires role: technova.operations
+
+
+
+
+if i applied ui policy as read only on project id and in acl i give permission to write it means to modify it to operation user so will it modify it? in very short
+
+No — UI Policy wins visually, but even if you remove the UI Policy, ACL alone still can't make an auto-number field editable.
+
+Auto-number fields (like Project ID) are inherently read-only in the form UI by ServiceNow's core field-type behavior — this isn't controlled by ACL or UI Policy at all. Even if:
+
+ACL allows write for Operations, and
+No UI Policy makes it read-only,
+...the field will still appear grayed out because that's how Auto Number field type behaves natively in ServiceNow.
+
+In short: ACL/UI Policy control security/visibility layers, but the field type itself (Auto Number) overrides and stays uneditable regardless.
+
+
+MIMP:
+FOR APPLYING FIELD LEVEL ACL WE FIRST HAVE TO GIVE THE READ AND WRITE BOTH 
+PERMISSION OF COMPLETE TABLE TO THAT ROLE AND CREATE A SEPARATE ACL FOR FIELD LEVEL ACL.
+fir ek badi ya koi dusra role dedo to vo nhi kar payega edit
+
+MMMMiMP: 
+hey understand my situation, i give all table read and write access to operation 
+role user, but then i created one more acl of write and give comment field and 
+permit only develop role users to edit or write for this field. now according to 
+me what should happen is operation role user only see this comment field read only 
+and can't edit this. becaause only developer role can handle it. but when i 
+impersonate developer for that table there he also can''t able to change that 
+field it showed read only, my question is why? what happened to him? do i need 
+to give any other permission to developer user?
+
+ans: **Reason:** Developer is failing the **record-level `write` ACL** — remember, the record-level write ACL and field-level write ACL are **both required**, and both must pass.
+
+Since your record-level `write` ACL likely only allows the `operations` role (based on earlier steps), Developer **fails at the record level itself** — so it doesn't even matter that Developer passes the field-level Comments ACL. Record-level check blocks him first.
+
+**Fix:** Add `developer` role to the **record-level write ACL** too (not just the field-level one) — so Developer passes both checks:
+1. Record-level write ACL ✅ (needs developer added)
+2. Field-level write ACL on Comments ✅ (already has developer)
+
+**In short:** You gave developer field-level write, but forgot to also give them record-level write — both are required together.
+
+
+Yes — Developer needs **record-level write** access on the table (at least basic write permission), otherwise field-level ACLs never even get checked.
+
+**But careful:** Giving record-level write opens **all fields** by default, unless you **also lock down other sensitive fields individually** with their own field-level ACLs (like you did for ID fields with Deny Unless).
+
+**Pattern to remember:**
+- Record-level write ACL = "can this role edit records at all?" (broad gate)
+- Field-level ACL = "can this role edit *this specific field*?" (fine-tune within that gate)
+
+So yes, **every time** you want a role to edit *any* field via field-level ACL, that role must first pass the record-level write ACL too — it's not one-time, it's just how the security layering works.
+
+
+in record level we have to give permission for whole table to write right? in very shortYes — a record-level write ACL grants permission to write to the entire record (all fields, by default), not just one field. Field-level ACLs then fine-tune/restrict specific fields within that already-granted record access.
+
+
+
+
+
+
+
+
+
+
+
+RESOURCE MANAGER CAN CREATE RESOURCE ALLOCATION, AND OPERATIONS TEAM CAN
+MANAGE THESE RESOURCE LISTS

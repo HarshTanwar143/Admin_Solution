@@ -1,0 +1,68 @@
+9. Access – Resource Manager can create Employee Skill Mappings
+Resource Managers should be able to create new Employee Skill Mapping records.
+● Can create employee skill mappings
+● Can read skill and employee records
+● Cannot delete skill mappings
+Skill governance remains controlled while allowing onboarding of skills
+
+
+i want that this can read the records and won't write or update the existing recoreds, 
+he can able to create the new record
+
+
+abhi skill table me read diya hai resource manager ko
+and user skill table me bhi read create write diya hai resource manager ko.
+
+
+so proficiency level in user skills can be created by resource manager, but
+it will only modified by operations team
+
+issue  1: hey an operation role user can't see anything in user skill table, 
+even i gave him all CRUD operations on this user skill table.
+
+
+
+
+why?
+Fields: ● Developers Needed ● QA Needed ● Architects Needed Requirement: 1. Editable only when Project Status = Planned 2. Once status ≠ Planned, fields become read-only 3. Operations can edit these fields at all times
+
+to make these 3 fields editable by operation, do i need to first give the complete read and write access of project table to this operation role? in very short
+
+
+MIMP : REQ 10:
+vimp understanding:
+ ok now i understand like operations team can do modifications on any field no 
+restriction. but if suppose there is a project manager which has 2 projects and 
+in one 1st project he has status is planning then in this he can modify these 3 
+fields there is no read only on them but if in 2nd project it has anything else 
+status then these 3 fields become read only, right ? 
+
+
+important req 12:
+good eg of allow if and deny unless:
+abhi maine resoource manager ko allow if se ek to write ka complete access de rkha h
+and 
+ek dusre acl me allow if se write ka access diya hai only when status is not approved
+and not rejected.
+
+abb dono me allow if h yaani agar koi bhi condition match hue, koi ek bhi, 
+too vo chal jayega. to issliye status approved ke baad bhi ye edit kar paa rha hai,
+
+abb deny unless de do ki agar status ye h to write ka milega hi nhi.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
